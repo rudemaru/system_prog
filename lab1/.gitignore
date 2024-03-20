@@ -99,7 +99,7 @@ dkms.conf
 # *.ipr
 
 # CMake
-cmake-build-*/
+../cmake-build-debug/
 CMakeLists.txt
 
 # Mongo Explorer plugin

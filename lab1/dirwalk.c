@@ -19,7 +19,6 @@ struct option long_options[] = {
         {"show_dirs", no_argument, 0, 'd'},
         {"show_files", no_argument, 0, 'f'},
         {"sort", no_argument, 0, 's'},
-        {0, 0, 0, 0}
 };
 
 
