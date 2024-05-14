@@ -20,14 +20,20 @@ int main(int argc, char* argv[], char* envp[]) {
                     printf("%s=%s\n", variables[i], getenv(variables[i]));
                 break;
             case '*':
-                for (int i = 0; i < VAR_NUM; i++)
+                for (int i = 0; i < VAR_NUM; i++) {
                     //Поиск по названию в envp
-                    printf("%s\n", getEnvpVariable(envp, variables[i]));
+                    char* response = getEnvpVariable(envp, variables[i]); 
+                    if(response != NULL)
+                        printf("%s\n", response);
+                }
                 break;
             case '&':
-                for (int i = 0; i < VAR_NUM; i++)
+                for (int i = 0; i < VAR_NUM; i++) {
                     //Поиск по названию в environ
-                    printf("%s\n", getEnvpVariable(environ, variables[i]));
+                    char *response = getEnvpVariable(environ, variables[i]);
+                    if (response != NULL)
+                        printf("%s\n", response);
+                }
                 break;
         }
         for (int i = 0; i < VAR_NUM; i++)

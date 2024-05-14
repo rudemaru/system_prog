@@ -17,7 +17,7 @@ char** getFileVariables(const char* fileName) {
 }
 
 int includeString(const char* str1, const char* str2) {
-    for(size_t i = 0; i<strlen(str2); i++)
+    for(size_t i = 0; i<strlen(str2)-1; i++)
         if(str1[i]!=str2[i])
             return 0;
     return 1;
