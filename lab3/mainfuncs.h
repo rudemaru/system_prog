@@ -12,7 +12,7 @@
 #include <errno.h>
 #include <sys/types.h>
 
-#define REPEAT_COUNT 1
+#define REPEAT_COUNT 5
 
 typedef struct {
     int firstVal;

@@ -9,8 +9,8 @@ else
 	CFLAGS = $(CFLAGS_RELEASE)
 endif
 all: program
-program: main.c mainfuncs.c stack.c Makefile
-	$(CC) -o program *.c
+program: main.c mainfuncs.c stack.c ring.c Makefile
+	$(CC) $(CFLAGS) *.c -o program
 run:
 	./program
 clean:
