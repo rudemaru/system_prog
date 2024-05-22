@@ -1,13 +1,13 @@
 #include "ring.h"
 
 void push(QUEUE* queue) {
-    if(queue->currentPlaceToWrite > END_PLACE_TO_WRITE)                        // Установка места добавления.
+    if(queue->currentPlaceToWrite > END_PLACE_TO_WRITE)
         queue->currentPlaceToWrite = START_PLACE_TO_WRITE;
-    NODE *temp = (NODE *)((uintptr_t)queue + queue->currentPlaceToWrite);      // Инициализация памяти.
+    NODE *temp = (NODE *)((uintptr_t)queue + queue->currentPlaceToWrite);
     temp->message = ((uintptr_t)queue + queue->currentPlaceToWrite + sizeof(NODE));
-    initMes((MESSAGE*)temp->message);                                          // Инициализация сообщения.
+    initMes((MESSAGE*)temp->message);
     if (queue->ringHead != 0) {
-        temp->next = queue->ringHead;                                          // Добавление в кольцо.
+        temp->next = queue->ringHead;
         temp->prev = queue->ringTail;
         ((NODE*)(queue->ringHead+(uintptr_t)queue))->prev = (uintptr_t)temp - (uintptr_t)queue;
         ((NODE*)(queue->ringTail+(uintptr_t)queue))->next = (uintptr_t)temp - (uintptr_t)queue;
@@ -23,7 +23,7 @@ void push(QUEUE* queue) {
 void pop(QUEUE* queue) {
     if (queue->ringHead != 0) {
         if (queue->ringHead != queue->ringTail) {
-            NODE *temp = (NODE *) (queue->ringHead + (uintptr_t) queue);      // Удаление.
+            NODE *temp = (NODE *) (queue->ringHead + (uintptr_t) queue);
             ((NODE *) (queue->ringTail + (uintptr_t) queue))->next = temp->next;
             ((NODE *) (temp->next + (uintptr_t) queue))->prev = queue->ringTail;
             queue->ringHead = temp->next;
