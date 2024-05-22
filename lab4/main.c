@@ -33,8 +33,8 @@ int main() {
     queue->countAdded = 0;
     queue->currentPlaceToWrite = (uintptr_t)queue + sizeof(QUEUE);         // Место для записи.
 
-    sem_t* fillSem;
-    if((fillSem = sem_open(SEND_SEM_NAME, O_CREAT | O_EXCL, 0666, 1)) == SEM_FAILED) {
+    sem_t* sendSem;
+    if((sendSem = sem_open(SEND_SEM_NAME, O_CREAT | O_EXCL, 0666, 1)) == SEM_FAILED) {
         printf("Error while open filling semaphore, code %d.\n", errno);
         exit(errno);
     }
@@ -55,7 +55,7 @@ int main() {
             case 's': { //create filler
                 pid_t pid = fork();
                 if(pid == -1) {
-                    printf("Error occurred while creating new filler, error code %d.\n", errno);
+                    printf("Error occurred while creating new sender, error code %d.\n", errno);
                     exit(errno);
                 } else if(pid == 0) {
                     sendingMessages();
@@ -70,7 +70,7 @@ int main() {
                     waitpid(stackSender->pid, NULL, 0);
                     popStack(&stackSender);
                 } else
-                    printf("There is no fillers.\n");
+                    printf("There is no senders.\n");
                 break;
             case 'r': { //create receiver
                 pid_t pid = fork();
@@ -113,7 +113,7 @@ int main() {
     close(shm_fd);
     shm_unlink(SHARED_MEMORY_NAME);
 
-    sem_close(fillSem);
+    sem_close(sendSem);
     sem_unlink(SEND_SEM_NAME);
     sem_close(receiveSem);
     sem_unlink(RECEIVE_SEM_NAME);
