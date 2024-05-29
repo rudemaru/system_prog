@@ -24,6 +24,7 @@ void sendingMessages() {
         printf("Error while opening filling semaphore.\n");
         exit(EXIT_FAILURE);
     }
+
     while (continuing) {
         sem_wait(queueAccess);
         sem_wait(sendSem);
@@ -76,7 +77,7 @@ void receivingMessages() {
         sem_wait(queueAccess);
         sem_wait(receiveSem);
 
-        if(queue->countAdded - queue->countDeleted > 0) {        // Чтение, если есть что читать.
+        if(queue->countAdded - queue->countDeleted > 0) {
             printf("Delete %d message:\n\n", queue->countDeleted+1);
             printMes((MESSAGE*)(((NODE*)(queue->ringHead + (uintptr_t)queue))->message));
             pop(queue);

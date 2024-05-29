@@ -20,8 +20,9 @@ int main() {
         printf("Error while creating shared memory.\n");
         exit(EXIT_FAILURE);
     }
-    ftruncate(shm_fd, sizeof(QUEUE)+MAX_MES_COUNT*sizeof(NODE)+MAX_MES_COUNT*sizeof(MESSAGE)); // Выделить место под заданное количество элементов очереди.
-    // Получение образа памяти.
+
+    ftruncate(shm_fd, sizeof(QUEUE)+MAX_MES_COUNT*sizeof(NODE)+MAX_MES_COUNT*sizeof(MESSAGE));
+
     QUEUE* queue = mmap(NULL, sizeof(QUEUE)+MAX_MES_COUNT*sizeof(NODE)+MAX_MES_COUNT*sizeof(MESSAGE), PROT_READ | PROT_WRITE, MAP_SHARED, shm_fd, 0);
     if(queue == MAP_FAILED) {
         printf("Error while mapping shared data.\n");
@@ -31,7 +32,7 @@ int main() {
     queue->ringTail = 0;
     queue->countDeleted = 0;
     queue->countAdded = 0;
-    queue->currentPlaceToWrite = (uintptr_t)queue + sizeof(QUEUE);         // Место для записи.
+    queue->currentPlaceToWrite = (uintptr_t)queue + sizeof(QUEUE);
 
     sem_t* sendSem;
     if((sendSem = sem_open(SEND_SEM_NAME, O_CREAT | O_EXCL, 0666, 1)) == SEM_FAILED) {
@@ -52,7 +53,7 @@ int main() {
     while(continuing) {
         char ch = getchar();
         switch (ch) {
-            case 's': { //create filler
+            case 's': { //create sender
                 pid_t pid = fork();
                 if(pid == -1) {
                     printf("Error occurred while creating new sender, error code %d.\n", errno);
@@ -64,7 +65,7 @@ int main() {
                     pushStack(&stackSender, pid);
                 break;
             }
-            case 'k': //delete filler
+            case 'k': //delete sender
                 if(stackSender!=NULL) {
                     kill(stackSender->pid, SIGUSR1);
                     waitpid(stackSender->pid, NULL, 0);
